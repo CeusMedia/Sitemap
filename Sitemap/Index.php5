@@ -61,7 +61,10 @@ class CMM_SGT_Sitemap_Index{
 	 *	@return		integer		Number of written bytes
 	 */
 	public function save( $fileName, $compression = NULL ){
-		return File_Writer::save( $fileName, $this->render( $compression ) );
+		$number	= File_Writer::save( $fileName, $this->render() );
+		if( $compression )
+			$number	= CMM_SGT_Compressor::compressFile( $fileName, $compression );
+		return $number;
 	}
 }
 ?>
