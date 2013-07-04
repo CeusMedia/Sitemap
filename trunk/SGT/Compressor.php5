@@ -30,12 +30,16 @@ class CMM_SGT_Compressor{
 	 *	@throws		OutOfRangeException		if compression method is invalid
 	 */
 	static public function compressString( $xml, $method ){
-		if( $method == self::METHOD_NONE )															//  no compression needed
-			return;																					//  quit
-		if( !in_array( $method, array( self::METHOD_BZIP, self::METHOD_GZIP ) ) )					//  invalid method
-			throw new OutOfRangeException( 'Invalid compression method' );							//  quit with exception
-		$xml	= ( $method == self::METHOD_BZIP ) ? bzcompress( $xml ) : gzencode( $xml );			//  compress with gzip of bzip
-		return $xml;
+		switch( $method ){
+			case self::METHOD_NONE:																	//  no compression
+				return $xml;																		//  return original string
+			case self::METHOD_BZIP:																	//  bzip compression
+				return bzcompress( $xml, 9 );														//  compress with bzip
+			case self::METHOD_GZIP:																	//  gzip compression
+				return gzencode( $xml, 9 );															//  compress with gzip
+			default:																				//  invalid method
+				throw new OutOfRangeException( 'Invalid compression method' );						//  quit with exception
+		}
 	}
 
 	/**
@@ -57,6 +61,19 @@ class CMM_SGT_Compressor{
 		$size			= File_Writer::save( $fileNameNew, $xml );									//  save compressed file
 		unlink( $fileName );																		//  remove original file
 		return $size;																				//  return number of written bytes
+	}
+
+	static public function getContentType( $method ){
+		switch( $method ){
+			case self::METHOD_NONE:																	//  no compression
+				return "application/xml";															//  return original string
+			case self::METHOD_BZIP:																	//  bzip compression
+				return "application/x-bzip";														//  compress with bzip
+			case self::METHOD_GZIP:																	//  gzip compression
+				return "application/x-gzip";														//  compress with gzip
+			default:																				//  invalid method
+				throw new OutOfRangeException( 'Invalid compression method' );						//  quit with exception
+		}
 	}
 }
 ?>
