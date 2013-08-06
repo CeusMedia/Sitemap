@@ -2,7 +2,7 @@
 /**
  *	Data model of sitemaps.
  *
- *	Copyright (c) 2010-2013 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
+ *	Copyright (c) 2013 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  *	@category		cmModules
  *	@package		SGT
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			http://code.google.com/p/cmmodules/
  *	@since			0.3.0
@@ -31,7 +31,7 @@
  *	@category		cmModules
  *	@package		SGT
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2010-2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			http://code.google.com/p/cmmodules/
  *	@since			0.3.0
