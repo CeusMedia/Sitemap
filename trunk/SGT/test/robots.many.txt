@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /notexisting
+
+Sitemap: http://example.org/sitemap1.xml
+Sitemap: http://example.org/sitemap2.xml
+Sitemap: http://example.org/sitemap3.xml
