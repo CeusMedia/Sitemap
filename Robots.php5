@@ -38,28 +38,141 @@
  *	@version		$Id$
  */
 class CMM_SGT_Robots{
-	static public function renderMetaTag( $index = TRUE, $follow = TRUE ){
-		$index	= $index ? "INDEX" : "NOINDEX";
-		$follow	= $follow ? "FOLLOW" : "NOFOLLOW";
+	
+	static $regexKey		= "/^(Sitemap|sitemap|SITEMAP):/";
+	static $regexComplete	= "/^(Sitemap|sitemap|SITEMAP):(\s*)(%s)$/";
+
+	/**
+	 *	Extends existing robots.txt by sitemap entry if not existing.
+	 *	Alias for set().
+	 *	@static
+	 *	@access		public
+	 *	@param		string		$filePath	Path to robots.txt
+	 *	@param		string		$url		Sitemap URL
+	 *	@return		boolean
+	 */
+	static public function add( $filePath, $url ){
+		return self::set( $filePath, $url );
+	}
+
+	/**
+	 *	Removes all sitemap entries from robots.txt file.
+	 *	Alias for remove() without seconds argument (URL).
+	 *	@static
+	 *	@access		public
+	 *	@param		string		$filePath	Path to robots.txt
+	 *	@return		boolean
+	 */
+	static public function clear( $filePath ){
+		return (bool) self::remove( $filePath );
+	}
+
+	/**
+	 *	Indicates whether a sitemap entry is noted in existing robots.txt file.
+	 *	Looks for entry with given URL, otherwise for any entry at all.
+	 *	@static
+	 *	@access		public
+	 *	@param		string		$filePath	Path to robots.txt
+	 *	@param		string		$url		Sitemap URL (optional)
+	 *	@return		boolean		
+	 */
+	static public function has( $filePath, $url = NULL ){
+		$pattern	= self::$regexKey;
+		if( $url !== NULL ){
+			$pattern	= sprintf( self::$regexComplete, preg_quote( trim( $url ), '/' ) );
+		}
+		foreach( File_Reader::loadArray( $filePath ) as $line ){
+			if( preg_match( $pattern, trim( $line ) ) ){
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	/**
+	 *	Removes sitemap entries from robots.txt file.
+	 *	Looks for entry with given URL, otherwise for all entries.
+	 *	@static
+	 *	@access		public
+	 *	@param		string		$filePath	Path to robots.txt
+	 *	@param		string		$url		Sitemap URL (optional)
+	 *	@return		integer		Number of removed sitemap entries
+	 */
+	static public function remove( $filePath, $url = NULL ){
+		$editor		= new File_Editor( $filePath );
+		$lines		= $editor->readArray();
+
+		$list		= array();
+		$pattern	= self::$regexKey;
+		if( $url !== NULL ){
+			$pattern	= sprintf( self::$regexComplete, preg_quote( trim( $url ), '/' ) );
+		}
+		foreach( $lines as $line ){
+			if( !preg_match( $pattern, trim( $line ) ) ){
+				$list[]	= $line;
+			}
+		}
+		$nrDiff	= count( $lines ) - count( $list );
+		if( $nrDiff === 0 )
+			$editor->writeArray( $lines );
+		return $nrDiff;
+	}
+
+	/**
+	 *	Render HTML meta tag for robot rules.
+	 *	@static
+	 *	@access		public
+	 *	@param		boolean		$noIndex		Flag: 
+	 *	@param		boolean		$noFollow		Flag: search engine robot should not follow links within this HTML page
+	 *	@return		string|NULL					Rendered HTML meta tag or NULL if no rules where activated
+	 */
+	static public function renderMetaTag( $noIndex = FALSE, $noFollow = FALSE ){
+		$rules	= array();
+		if( $noIndex )
+			$rules[]	= "NOINDEX";
+		if( $noFollow )
+			$rules[]	= "NOFOLLOW";
+		if( !count( $rules ) )
+			return NULL;
 		$attributes	= array(
 			'name'		=> 'robots',
-			'content'	=> $index.', '.$follow,
+			'content'	=> join( ', ', $rules ),
 		);
 		return UI_HTML_Tag::create( 'meta', NULL, $attributes );
 	}
 
+	/**
+	 *	Renders sitemap entry for robots.txt.
+	 *	@static
+	 *	@access		public
+	 *	@param		string		$url		Sitemap URL
+	 *	@return		string
+	 */
 	static public function renderText( $url ){
-		return "Sitemap: ".$url;
+		return "Sitemap: ".trim( $url );
 	}
 
-	static public function extendFile( $fileName, $url ){
-		$editor	= new File_Editor( $fileName );
-		$text	= $editor->readString();
-		foreach( explode( "\n", $text ) as $line )
-			if( preg_match( "/^Sitemap: /", $line ) )
+	/**
+	 *	Extends existing robots.txt by sitemap entry if not existing.
+	 *	@static
+	 *	@access		public
+	 *	@param		string		$filePath	Path to robots.txt
+	 *	@param		string		$url		Sitemap URL
+	 *	@return		boolean
+	 */
+	static public function set( $filePath, $url ){
+		$editor		= new File_Editor( $filePath );
+		$lines		= explode( PHP_EOL, trim( $editor->readString() ) );
+		$pattern	= sprintf( self::$regexComplete, preg_quote( trim( $url ), '/' ) );
+		foreach( $lines as $line ){
+			if( preg_match( $pattern, trim( $line ) ) ){
 				return FALSE;
-		$text	.= "\n".self::renderText( $url )."\n";
-		return (bool) $editor->writeString( $text );
+			}
+		}
+		if( !self::has( $filePath ) )
+			$lines[]	= "";
+		$lines[]	= self::renderText( $url ).PHP_EOL;
+		return (bool) $editor->writeArray( $lines );
 	}
 }
 ?>
