@@ -75,9 +75,9 @@ class Compressor{
 		if( !in_array( $method, array( self::METHOD_BZIP, self::METHOD_GZIP ) ) )					//  invalid method
 			throw new \OutOfRangeException( 'Invalid compression method' );							//  quit with exception
 		$fileNameNew	= $fileName.( $method == self::METHOD_BZIP ? ".bz" : ".gz" );				//  calculate new file name
-		$xml			= File_Reader::load( $fileName );											//  load original file
+		$xml			= \File_Reader::load( $fileName );											//  load original file
 		$xml			= self::compressString( $xml, $method );									//  compress xml string
-		$size			= File_Writer::save( $fileNameNew, $xml );									//  save compressed file
+		$size			= \File_Writer::save( $fileNameNew, $xml );									//  save compressed file
 		unlink( $fileName );																		//  remove original file
 		return $size;																				//  return number of written bytes
 	}

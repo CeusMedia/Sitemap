@@ -34,7 +34,7 @@ namespace CeusMedia\Sitemap\Model;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/Sitemap
  */
-class Map implements Countable{
+class Map implements \Countable{
 
 	/**	@var		string		$url		URL of sitemap for sitemap index */
 	protected $url				= NULL;

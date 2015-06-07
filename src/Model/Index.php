@@ -80,7 +80,7 @@ class CMM_SGT_Sitemap_Index{
 	 *	@return		integer		Number of written bytes
 	 */
 	public function save( $fileName, $compression = NULL ){
-		$number	= File_Writer::save( $fileName, $this->render() );
+		$number	= \File_Writer::save( $fileName, $this->render() );
 		if( $compression )
 			$number	= \CeusMedia\Sitemap\Compressor::compressFile( $fileName, $compression );
 		return $number;

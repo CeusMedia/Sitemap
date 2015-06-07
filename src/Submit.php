@@ -70,7 +70,7 @@ class Submit{
 	 *	@throws		\InvalidArgumentException	if provider key is invalid
 	 */
 	static public function toProvider( $provider, $url ){
-		if( $url instanceof ADT_URL )
+		if( $url instanceof \ADT_URL )
 			$url	= (string) $url;
 		if( !is_string( $url ) )
 			throw new \InvalidArgumentException( 'URL must be string or instance of ADT_URL' );
@@ -80,9 +80,9 @@ class Submit{
 		}
 		$url	= sprintf( self::$providers[strtolower( $provider )], urlencode( $url ) );			//  ...
 		try{
-			$curl	= new Net_CURL( $url );
+			$curl	= new \Net_CURL( $url );
 			$curl->exec();
-			if( (int) $curl->getInfo( Net_CURL::INFO_HTTP_CODE ) === 200 )
+			if( (int) $curl->getInfo( \Net_CURL::INFO_HTTP_CODE ) === 200 )
 				return TRUE;
 		}
 		catch( \Exception $e ){}

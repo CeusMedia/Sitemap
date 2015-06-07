@@ -68,7 +68,7 @@ class Reader{
 	}
 
 	static public function readSitemap( $xml ){
-		$parser		= new XML_DOM_Parser();
+		$parser		= new \XML_DOM_Parser();
 		$tree		= $parser->parse( $xml );
 		$sitemap	= new \CeusMedia\Sitemap\Model\Map();
 		$attributes	= array( 'loc', 'lastmod', 'frequency', 'priority' );
@@ -96,14 +96,14 @@ class Reader{
 	}
 
 	static public function readSitemapFile( $fileName ){
-		$xml	= File_Reader::load( $fileName );
+		$xml	= \File_Reader::load( $fileName );
 		if( ( $method = self::detectCompression( $fileName ) ) )
 			$xml	= self::uncompressXml ( $xml, $method );
 		return self::readSitemap( $xml );
 	}
 
 	static public function readSitemapUrl( $url ){
-		$xml		= Net_Reader::readUrl( $url );
+		$xml		= \Net_Reader::readUrl( $url );
 		if( ( $method = self::detectCompression( $url ) ) )
 			$xml	= self::uncompressXml ( $xml, $method );
 		$sitemap	= self::readSitemap( $xml );
@@ -112,18 +112,18 @@ class Reader{
 	}
 
 	static public function readIndex( $xml ){
-		$parser	= new XML_DOM_Parser();
+		$parser	= new \XML_DOM_Parser();
 		$tree	= $parser->parse( $xml );
 		return self::convertTreeToSitemapIndex( $tree );
 	}
 
 	static public function readIndexFile( $fileName ){
-		$tree	= XML_DOM_FileReader::load( $fileName);
+		$tree	= \XML_DOM_FileReader::load( $fileName);
 		return self::convertTreeToSitemapIndex( $tree );
 	}
 
 	static public function readIndexUrl( $url ){
-		$tree	= XML_DOM_UrlReader::load( $url );
+		$tree	= \XML_DOM_UrlReader::load( $url );
 		return self::convertTreeToSitemapIndex( $tree );
 	}
 

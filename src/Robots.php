@@ -135,7 +135,7 @@ class Robots{
 			'name'		=> 'robots',
 			'content'	=> join( ', ', $rules ),
 		);
-		return UI_HTML_Tag::create( 'meta', NULL, $attributes );
+		return \UI_HTML_Tag::create( 'meta', NULL, $attributes );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Robots{
 	 *	@return		boolean
 	 */
 	static public function set( $filePath, $url ){
-		$editor		= new File_Editor( $filePath );
+		$editor		= new \File_Editor( $filePath );
 		$lines		= explode( PHP_EOL, trim( $editor->readString() ) );
 		$pattern	= sprintf( self::$regexComplete, preg_quote( trim( $url ), '/' ) );
 		foreach( $lines as $line ){

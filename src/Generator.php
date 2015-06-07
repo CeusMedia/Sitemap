@@ -53,16 +53,16 @@ class Generator{
 		if( self::$maxUrls && count( $sitemap ) > self::$maxUrls )
 			throw new \OutOfBoundsException( 'Sitemap has more than '.self::$maxUrls.' URLs and needs to be spitted' );
 
-		$tree	= new XML_DOM_Node( 'urlset' );
+		$tree	= new \XML_DOM_Node( 'urlset' );
 		$tree->setAttribute( 'xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9' );
 		foreach( $sitemap->getUrls() as $url ){
-			$node	= new XML_DOM_Node( 'url' );
-			$node->addChild( new XML_DOM_Node( 'loc', $url->getLocation() ) );
+			$node	= new \XML_DOM_Node( 'url' );
+			$node->addChild( new \XML_DOM_Node( 'loc', $url->getLocation() ) );
 			if( ( $datetime = $url->getDatetime() ) )
-				$node->addChild( new XML_DOM_Node( 'lastmod', $datetime ) );
+				$node->addChild( new \XML_DOM_Node( 'lastmod', $datetime ) );
 			$tree->addChild( $node );
 		}
-		$xml		= XML_DOM_Builder::build( $tree );
+		$xml		= \XML_DOM_Builder::build( $tree );
 		if( self::$maxMegabytes && strlen( $xml ) > self::$maxMegabytes * 1024 * 1024 )
 			throw new \OutOfBoundsException( 'Rendered sitemap is to large (max: '.self::$maxMegabytes.' MB)' );
 		$compression	= is_null( $compression ) ? self::$compression : $compression;
@@ -80,16 +80,16 @@ class Generator{
 	 *	@return		string		XML string of sitemap index
 	 */
 	static public function renderSitemapIndex( \CeusMedia\Sitemap\Model\Index $index, $compression = NULL ){
-		$tree	= new XML_DOM_Node( 'sitemapindex' );										//
+		$tree	= new \XML_DOM_Node( 'sitemapindex' );										//
 		foreach( $index->getSitemaps() as $sitemap ){										//
 		$tree->setAttribute( 'xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9' );		//
-			$node	= new XML_DOM_Node( 'sitemap');											//
-			$node->addChild( new XML_DOM_Node( 'loc', $sitemap->getUrl() ) );				//
+			$node	= new \XML_DOM_Node( 'sitemap');											//
+			$node->addChild( new \XML_DOM_Node( 'loc', $sitemap->getUrl() ) );				//
 			if( $sitemap->getDatetime() )													//
-				$node->addChild( new XML_DOM_Node( 'lastmod', $sitemap->getDatetime() ) );	//
+				$node->addChild( new \XML_DOM_Node( 'lastmod', $sitemap->getDatetime() ) );	//
 			$tree->addChild( $node );														//
 		}
-		$xml		= XML_DOM_Builder::build( $tree );
+		$xml		= \XML_DOM_Builder::build( $tree );
 		$compression	= is_null( $compression ) ? self::$compression : $compression;
 		if( $compression )
 			$xml	= \CeusMedia\Sitemap\Compressor::compressString( $xml, $compression );
