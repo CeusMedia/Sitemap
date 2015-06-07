@@ -34,7 +34,7 @@ namespace CeusMedia\Sitemap\Model;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/Sitemap
  */
-class CMM_SGT_Sitemap_Index{
+class Index{
 
 	/**	@var		array		$sitemaps		List of sitemaps within index */
 	protected $sitemaps			= array();
@@ -50,6 +50,9 @@ class CMM_SGT_Sitemap_Index{
 	public function addSitemap( \CeusMedia\Sitemap\Model\Map $sitemap ){
 		if( !$sitemap->getUrl() )
 			throw new \Exception( 'Sitemaps needs to have an URL to be indexable' );
+		foreach( $this->sitemaps as $item )
+			if( $item->getUrl() === $sitemap->getUrl() )
+				throw new \RuntimeException( 'This sitemap is already indexed' );
 		$this->sitemaps[]	= $sitemap;
 	}
 

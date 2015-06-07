@@ -86,7 +86,7 @@ class Reader{
 				if( strlen( trim( $lastmod ) ) )
 					$url->setDatetime ( $lastmod );
 				if( strlen( trim( $frequency ) ) )
-					$url->setFreqency ( $frequency );
+					$url->setFrequency ( $frequency );
 				if( strlen( trim( $priority ) ) )
 					$url->setDatetime ( $priority );
 				$sitemap->addUrl( $url );
