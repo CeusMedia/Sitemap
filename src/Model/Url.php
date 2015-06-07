@@ -26,6 +26,7 @@
  *	@since			0.3.0
  *	@version		$Id$
  */
+namespace CeusMedia\Sitemap\Model;
 /**
  *	Data model of URL for sitemaps.
  *	@category		cmModules
@@ -37,17 +38,17 @@
  *	@since			0.3.0
  *	@version		$Id$
  */
-class CMM_SGT_Sitemap_URL{
-	
+class Url{
+
 	/**	@var	string		$location */
 	protected $location		= "";
-	
+
 	/**	@var	string		$datetime */
 	protected $datetime		= NULL;
-	
+
 	/**	@var	string		$frequency */
 	protected $frequency	= NULL;
-	
+
 	/**	@var	float		$priority */
 	protected $priority		= NULL;
 
@@ -136,7 +137,7 @@ class CMM_SGT_Sitemap_URL{
 	public function setFreqency( $frequency ){
 		$frequency	= trim( strolower( $frequency ) );
 		if( !in_array( $frequency, $this->frequencies ) )
-			throw new InvalidArgumentException( 'Frequency must with one of '.join( ', ', $this->frequencies ) );
+			throw new \InvalidArgumentException( 'Frequency must with one of '.join( ', ', $this->frequencies ) );
 		$this->frequency	= $frequency;
 	}
 
@@ -155,14 +156,14 @@ class CMM_SGT_Sitemap_URL{
 	 *	Set priority of sitemap resource.
 	 *	@access		public
 	 *	@param		float		$priority		...
-	 *	@throws		OutOfBoundsException
+	 *	@throws		OutOfBoundsException		if priority is < 0 or > 1
 	 *	@return		void
 	 */
 	public function setPriority( $priority = 0.5 ){
 		if( $priority < 0 )
-			throw new OutOfBoundsException( 'Priority cannot be lower than 0' );
+			throw new \OutOfBoundsException( 'Priority cannot be lower than 0' );
 		else if( $priority > 1 )
-			throw new OutOfBoundsException( 'Priority cannot be greater than 1' );
+			throw new \OutOfBoundsException( 'Priority cannot be greater than 1' );
 		$this->priority	= priority;
 	}
 }
