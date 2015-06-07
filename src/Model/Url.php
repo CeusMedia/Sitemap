@@ -73,7 +73,7 @@ class Url{
 		if( !is_null( $datetime ) )
 			$this->setDatetime( $datetime );
 		if( !is_null( $frequency ) )
-			$this->setFreqency( $frequency );
+			$this->setFrequency( $frequency );
 		if( !is_null( $priority ) )
 			$this->setPriority( $priority );
 	}
@@ -121,6 +121,8 @@ class Url{
 	 *	@return		void
 	 */
 	public function setLocation( $url ){
+		if( !preg_match( "@^\w+://@", $url ) )
+			throw new \InvalidArgumentException( 'Location URL is missing prototcol' );
 		$this->location	= $url;
 	}
 
@@ -130,8 +132,8 @@ class Url{
 	 *	@throws		\InvalidArgumentException
 	 *	@return		void
 	 */
-	public function setFreqency( $frequency ){
-		$frequency	= trim( strolower( $frequency ) );
+	public function setFrequency( $frequency ){
+		$frequency	= trim( strtolower( $frequency ) );
 		if( !in_array( $frequency, $this->frequencies ) )
 			throw new \InvalidArgumentException( 'Frequency must with one of '.join( ', ', $this->frequencies ) );
 		$this->frequency	= $frequency;
@@ -145,6 +147,8 @@ class Url{
 	 *	@return		void
 	 */
 	public function setDatetime( $datetime ){
+		if( !strtotime( $datetime ) )
+			throw new \InvalidArgumentException( 'Invalid date format' );
 		$this->datetime	= $datetime;
 	}
 
@@ -160,7 +164,7 @@ class Url{
 			throw new \OutOfBoundsException( 'Priority cannot be lower than 0' );
 		else if( $priority > 1 )
 			throw new \OutOfBoundsException( 'Priority cannot be greater than 1' );
-		$this->priority	= priority;
+		$this->priority	= $priority;
 	}
 }
 ?>

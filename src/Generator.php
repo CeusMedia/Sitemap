@@ -58,8 +58,15 @@ class Generator{
 		foreach( $sitemap->getUrls() as $url ){
 			$node	= new \XML_DOM_Node( 'url' );
 			$node->addChild( new \XML_DOM_Node( 'loc', $url->getLocation() ) );
-			if( ( $datetime = $url->getDatetime() ) )
+			if( ( $datetime = $url->getDatetime() ) ){
+				$datetime	= date( "c", strtotime( $datetime ) );
 				$node->addChild( new \XML_DOM_Node( 'lastmod', $datetime ) );
+
+			}
+			if( ( $frequency = $url->getFrequency() ) )
+				$node->addChild( new \XML_DOM_Node( 'changefreq', $frequency ) );
+			if( ( $priority = $url->getPriority() ) )
+				$node->addChild( new \XML_DOM_Node( 'priority', $priority ) );
 			$tree->addChild( $node );
 		}
 		$xml		= \XML_DOM_Builder::build( $tree );
@@ -89,7 +96,7 @@ class Generator{
 				$node->addChild( new \XML_DOM_Node( 'lastmod', $sitemap->getDatetime() ) );	//
 			$tree->addChild( $node );														//
 		}
-		$xml		= \XML_DOM_Builder::build( $tree );
+		$xml			= \XML_DOM_Builder::build( $tree );
 		$compression	= is_null( $compression ) ? self::$compression : $compression;
 		if( $compression )
 			$xml	= \CeusMedia\Sitemap\Compressor::compressString( $xml, $compression );

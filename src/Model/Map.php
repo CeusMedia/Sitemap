@@ -146,7 +146,7 @@ class Map implements \Countable{
 	 *	@return		integer		Number of written bytes
 	 */
 	public function save( $fileName, $compression = NULL ){
-		$number	= File_Writer::save( $fileName, $this->render() );
+		$number	= \File_Writer::save( $fileName, $this->render() );
 		if( $compression )
 			$number	= \CeusMedia\Sitemap\Compressor::compressFile( $fileName, $compression );
 		return $number;
@@ -160,6 +160,8 @@ class Map implements \Countable{
 	 *	@return		void
 	 */
 	public function setDatetime( $datetime ){
+		if( !strtotime( $datetime ) )
+			throw new \InvalidArgumentException( 'Invalid date format' );
 		$this->datetime	= $datetime;
 	}
 
@@ -170,6 +172,8 @@ class Map implements \Countable{
 	 *	@return		void
 	 */
 	public function setUrl( $url ){
+		if( !preg_match( "@^\w+://@", $url ) )
+			throw new \InvalidArgumentException( 'Sitemap URL is missing prototcol' );
 		$this->url	= $url;
 	}
 }
