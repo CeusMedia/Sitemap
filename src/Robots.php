@@ -17,28 +17,25 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
+namespace CeusMedia\Sitemap;
 /**
  *	Generator for sitemaps and sitemap indices.
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
-class CMM_SGT_Robots{
-	
+class Robots{
+
 	static $regexKey		= "/^(Sitemap|sitemap|SITEMAP):/";
 	static $regexComplete	= "/^(Sitemap|sitemap|SITEMAP):(\s*)(%s)$/";
 
@@ -74,7 +71,7 @@ class CMM_SGT_Robots{
 	 *	@access		public
 	 *	@param		string		$filePath	Path to robots.txt
 	 *	@param		string		$url		Sitemap URL (optional)
-	 *	@return		boolean		
+	 *	@return		boolean
 	 */
 	static public function has( $filePath, $url = NULL ){
 		$pattern	= self::$regexKey;
@@ -122,7 +119,7 @@ class CMM_SGT_Robots{
 	 *	Render HTML meta tag for robot rules.
 	 *	@static
 	 *	@access		public
-	 *	@param		boolean		$noIndex		Flag: 
+	 *	@param		boolean		$noIndex		Flag:
 	 *	@param		boolean		$noFollow		Flag: search engine robot should not follow links within this HTML page
 	 *	@return		string|NULL					Rendered HTML meta tag or NULL if no rules where activated
 	 */

@@ -17,36 +17,33 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
+namespace CeusMedia\Sitemap;
 /**
  *	Submits sitemap URL to Google and Bing webmaster tools.
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
-class CMM_SGT_Reader{
+class Reader{
 
 	static protected function convertTreeToSitemapIndex( XML_DOM_Node $tree ){
-		$index		= new CMM_SGT_Sitemap_Index();
+		$index		= new \CeusMedia\Sitemap\Model\Index();
 		$attributes	= array( 'loc', 'lastmod' );
 		if( $tree->getNodeName() !== "sitemapindex" )
-			throw new Exception( 'Root node of sitemap index must be "sitemapindex"' );
+			throw new \Exception( 'Root node of sitemap index must be "sitemapindex"' );
 		foreach( $tree->getChildren() as $child ){
 			if( $child->getNodeName() !== "sitemap" )
-				throw new Exception( 'Missing node of type "sitemap"' );
+				throw new \Exception( 'Missing node of type "sitemap"' );
 			$loc = $lastmod = NULL;
 			foreach( $child->getChildren() as $node )
 				if( in_array( $node->getNodeName(), $attributes ) )
@@ -64,28 +61,28 @@ class CMM_SGT_Reader{
 
 	static public function detectCompression( $fileName ){
 		switch( pathinfo( $fileName, PATHINFO_EXTENSION ) ){
-			case 'bz':	return CMM_SGT_Compressor::METHOD_BZIP;
-			case 'gz':	return CMM_SGT_Compressor::METHOD_GZIP;
+			case 'bz':	return \CeusMedia\Sitemap\Compressor::METHOD_BZIP;
+			case 'gz':	return \CeusMedia\Sitemap\Compressor::METHOD_GZIP;
 		}
-		return CMM_SGT_Compressor::METHOD_NONE;
+		return \CeusMedia\Sitemap\Compressor::METHOD_NONE;
 	}
 
 	static public function readSitemap( $xml ){
 		$parser		= new XML_DOM_Parser();
 		$tree		= $parser->parse( $xml );
-		$sitemap	= new CMM_SGT_Sitemap();
+		$sitemap	= new \CeusMedia\Sitemap\Model\Map();
 		$attributes	= array( 'loc', 'lastmod', 'frequency', 'priority' );
 		if( $tree->getNodeName() !== "urlset" )
-			throw new Exception( 'Root node of sitemap must be "urlset"' );
+			throw new \Exception( 'Root node of sitemap must be "urlset"' );
 		foreach( $tree->getChildren() as $child ){
 			if( $child->getNodeName() !== "url" )
-				throw new Exception( 'Missing node of type "url"' );
+				throw new \Exception( 'Missing node of type "url"' );
 			$loc = $lastmod = $frequency = $priority = NULL;
 			foreach( $child->getChildren() as $node )
 				if( in_array( $node->getNodeName(), $attributes ) )
 					${$node->getNodeName()}	= $node->getContent();
 			if( strlen( trim( $loc ) ) ){
-				$url	= new CMM_SGT_Sitemap_URL( $loc );
+				$url	= new \CeusMedia\Sitemap\Model\Url( $loc );
 				if( strlen( trim( $lastmod ) ) )
 					$url->setDatetime ( $lastmod );
 				if( strlen( trim( $frequency ) ) )
@@ -129,14 +126,14 @@ class CMM_SGT_Reader{
 		$tree	= XML_DOM_UrlReader::load( $url );
 		return self::convertTreeToSitemapIndex( $tree );
 	}
-	
+
 	static public function uncompressXml( $xml, $method = 0 ){
 		switch( $method ){
-			case CMM_SGT_Compressor::METHOD_BZIP:
+			case \CeusMedia\Sitemap\Compressor::METHOD_BZIP:
 				return bzdecompress( $xml );
-			case CMM_SGT_Compressor::METHOD_GZIP:
+			case \CeusMedia\Sitemap\Compressor::METHOD_GZIP:
 				return gzdecode( $xml );
-			case CMM_SGT_Compressor::METHOD_NONE:
+			case \CeusMedia\Sitemap\Compressor::METHOD_NONE:
 				return $xml;
 		}
 	}

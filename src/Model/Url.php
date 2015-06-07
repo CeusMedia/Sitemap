@@ -17,26 +17,22 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		SGT.Sitemap
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap_Model
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
 namespace CeusMedia\Sitemap\Model;
 /**
  *	Data model of URL for sitemaps.
- *	@category		cmModules
- *	@package		SGT.Sitemap
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap_Model
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
 class Url{
 
@@ -67,7 +63,7 @@ class Url{
 	 *	Constructor.
 	 *	@access		public
 	 *	@param		string		$location		Location (absolute URL)
-	 *	@param		string		$datetime		Timestamp (@see 
+	 *	@param		string		$datetime		Timestamp (@see
 	 *	@param		string		$frequency
 	 *	@param		float		$priority
 	 *	@return		void
@@ -129,9 +125,9 @@ class Url{
 	}
 
 	/**
-	 *	Set 
+	 *	Set
 	 *	@param		string		$frequency		...
-	 *	@throws		InvalidArgumentException
+	 *	@throws		\InvalidArgumentException
 	 *	@return		void
 	 */
 	public function setFreqency( $frequency ){
@@ -156,7 +152,7 @@ class Url{
 	 *	Set priority of sitemap resource.
 	 *	@access		public
 	 *	@param		float		$priority		...
-	 *	@throws		OutOfBoundsException		if priority is < 0 or > 1
+	 *	@throws		\OutOfBoundsException		if priority is < 0 or > 1
 	 *	@return		void
 	 */
 	public function setPriority( $priority = 0.5 ){

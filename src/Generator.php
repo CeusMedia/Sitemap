@@ -17,44 +17,41 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
+namespace CeusMedia\Sitemap;
 /**
  *	Generator for sitemaps and sitemap indices.
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
-class CMM_SGT_Generator{
+class Generator{
 
 	static protected $maxUrls		= 50000;
 	static protected $maxMegabytes	= 10;
 	static protected $compression	= 0;
-	
+
 	/**
 	 *	...
 	 *	@static
 	 *	@access		public
-	 *	@param		CMM_SGT_Sitemap $sitemap
+	 *	@param		\CeusMedia\Sitemap\Model\Map $sitemap
 	 *	@return		type
-	 *	@throws		OutOfBoundsException
-	 *	@throws		OutOfRangeException
+	 *	@throws		\OutOfBoundsException
+	 *	@throws		\OutOfRangeException
 	 */
-	static public function renderSitemap( CMM_SGT_Sitemap $sitemap, $compression = NULL ){
+	static public function renderSitemap( \CeusMedia\Sitemap\Model\Map $sitemap, $compression = NULL ){
 		if( self::$maxUrls && count( $sitemap ) > self::$maxUrls )
-			throw new OutOfBoundsException( 'Sitemap has more than '.self::$maxUrls.' URLs and needs to be spitted' );
+			throw new \OutOfBoundsException( 'Sitemap has more than '.self::$maxUrls.' URLs and needs to be spitted' );
 
 		$tree	= new XML_DOM_Node( 'urlset' );
 		$tree->setAttribute( 'xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9' );
@@ -67,10 +64,10 @@ class CMM_SGT_Generator{
 		}
 		$xml		= XML_DOM_Builder::build( $tree );
 		if( self::$maxMegabytes && strlen( $xml ) > self::$maxMegabytes * 1024 * 1024 )
-			throw new OutOfBoundsException( 'Rendered sitemap is to large (max: '.self::$maxMegabytes.' MB)' );
+			throw new \OutOfBoundsException( 'Rendered sitemap is to large (max: '.self::$maxMegabytes.' MB)' );
 		$compression	= is_null( $compression ) ? self::$compression : $compression;
 		if( $compression )
-			$xml	= CMM_SGT_Compressor::compressString( $xml, $compression );
+			$xml	= \CeusMedia\Sitemap\Compressor::compressString( $xml, $compression );
 		return $xml;
 	}
 
@@ -78,24 +75,24 @@ class CMM_SGT_Generator{
 	 *	Returns XML string of given sitemap index.
 	 *	@static
 	 *	@access		public
-	 *	@param		CMM_SGT_Sitemap_Index	$index	Sitemap index data object
+	 *	@param		\CeusMedia\Sitemap\Model\Index	$index	Sitemap index data object
 	 *	@param		integer		$compression		Compression method (see CMM_SGT_Compressor)
 	 *	@return		string		XML string of sitemap index
 	 */
-	static public function renderSitemapIndex( CMM_SGT_Sitemap_Index $index, $compression = NULL ){
-		$tree	= new XML_DOM_Node( 'sitemapindex' );										//  
-		$tree->setAttribute( 'xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9' );		//  
-		foreach( $index->getSitemaps() as $sitemap ){										//  
-			$node	= new XML_DOM_Node( 'sitemap');											//  
-			$node->addChild( new XML_DOM_Node( 'loc', $sitemap->getUrl() ) );				//  
-			if( $sitemap->getDatetime() )													//  
-				$node->addChild( new XML_DOM_Node( 'lastmod', $sitemap->getDatetime() ) );	//  
-			$tree->addChild( $node );														//  
+	static public function renderSitemapIndex( \CeusMedia\Sitemap\Model\Index $index, $compression = NULL ){
+		$tree	= new XML_DOM_Node( 'sitemapindex' );										//
+		foreach( $index->getSitemaps() as $sitemap ){										//
+		$tree->setAttribute( 'xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9' );		//
+			$node	= new XML_DOM_Node( 'sitemap');											//
+			$node->addChild( new XML_DOM_Node( 'loc', $sitemap->getUrl() ) );				//
+			if( $sitemap->getDatetime() )													//
+				$node->addChild( new XML_DOM_Node( 'lastmod', $sitemap->getDatetime() ) );	//
+			$tree->addChild( $node );														//
 		}
 		$xml		= XML_DOM_Builder::build( $tree );
 		$compression	= is_null( $compression ) ? self::$compression : $compression;
 		if( $compression )
-			$xml	= CMM_SGT_Compressor::compressString( $xml, $compression );
+			$xml	= \CeusMedia\Sitemap\Compressor::compressString( $xml, $compression );
 		return $xml;
 	}
 
@@ -106,11 +103,11 @@ class CMM_SGT_Generator{
 	 *	@access		public
 	 *	@param		integer		$number			Maximum number of URLs in sitemap.
 	 *	@return		void
-	 *	@throws		OutOfBoundsException		if number is lower than 0 or greater than 50000
+	 *	@throws		\OutOfBoundsException		if number is lower than 0 or greater than 50000
 	 */
 	static public function setMaxUrls( $number ){
 		if( $number < 0 || $number > 50000 )
-			throw new OutOfBoundsException( 'URL limit must at least 0 (=unlimited) and atmost 50000' );
+			throw new \OutOfBoundsException( 'URL limit must at least 0 (=unlimited) and atmost 50000' );
 		self::$maxUrls	= $number;
 	}
 
@@ -120,11 +117,11 @@ class CMM_SGT_Generator{
 	 *	@access		public
 	 *	@param		float|integer	$number		Maximum megabytes
 	 *	@return		void
-	 *	@throws		OutOfBoundsException		if given number is lower than 0 or greater than 50
+	 *	@throws		\OutOfBoundsException		if given number is lower than 0 or greater than 50
 	 */
 	static public function setMaxMegabytes( $number ){
 		if( $number < 0 || $number > 50 )
-			throw new OutOfBoundsException( 'File size limit must at least 0 (=unlimited) and atmost 50' );
+			throw new \OutOfBoundsException( 'File size limit must at least 0 (=unlimited) and atmost 50' );
 		self::$maxMegabytes	= $number;
 	}
 }

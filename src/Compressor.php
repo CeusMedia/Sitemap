@@ -17,28 +17,25 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
+namespace CeusMedia\Sitemap;
 /**
  *	Compressor for sitemap as XML or file.
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
-class CMM_SGT_Compressor{
-	
+class Compressor{
+
 	const METHOD_NONE	= 0;
 	const METHOD_GZIP	= 1;
 	const METHOD_BZIP	= 2;
@@ -46,7 +43,7 @@ class CMM_SGT_Compressor{
 	/**
 	 *	Returns compressed string.
 	 *	@access		public
-	 *	@param		string		$xml		
+	 *	@param		string		$xml
 	 *	@param		integer		$method		Compression method
 	 *	@return		string		Compressed string
 	 *	@throws		OutOfRangeException		if compression method is invalid
@@ -60,7 +57,7 @@ class CMM_SGT_Compressor{
 			case self::METHOD_GZIP:																	//  gzip compression
 				return gzencode( $xml, 9 );															//  compress with gzip
 			default:																				//  invalid method
-				throw new OutOfRangeException( 'Invalid compression method' );						//  quit with exception
+				throw new \OutOfRangeException( 'Invalid compression method' );						//  quit with exception
 		}
 	}
 
@@ -76,7 +73,7 @@ class CMM_SGT_Compressor{
 		if( $method == self::METHOD_NONE )															//  no compression needed
 			return;																					//  quit
 		if( !in_array( $method, array( self::METHOD_BZIP, self::METHOD_GZIP ) ) )					//  invalid method
-			throw new OutOfRangeException( 'Invalid compression method' );							//  quit with exception
+			throw new \OutOfRangeException( 'Invalid compression method' );							//  quit with exception
 		$fileNameNew	= $fileName.( $method == self::METHOD_BZIP ? ".bz" : ".gz" );				//  calculate new file name
 		$xml			= File_Reader::load( $fileName );											//  load original file
 		$xml			= self::compressString( $xml, $method );									//  compress xml string
@@ -94,7 +91,7 @@ class CMM_SGT_Compressor{
 			case self::METHOD_GZIP:																	//  gzip compression
 				return "application/x-gzip";														//  compress with gzip
 			default:																				//  invalid method
-				throw new OutOfRangeException( 'Invalid compression method' );						//  quit with exception
+				throw new \OutOfRangeException( 'Invalid compression method' );						//  quit with exception
 		}
 	}
 }

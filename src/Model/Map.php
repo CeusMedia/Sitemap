@@ -17,27 +17,24 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap_Model
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
+namespace CeusMedia\Sitemap\Model;
 /**
  *	Data model of sitemaps.
- *	@category		cmModules
- *	@package		SGT
+ *	@category		Library
+ *	@package		CeusMedia_Sitemap_Model
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/Sitemap
  */
-class CMM_SGT_Sitemap implements Countable{
+class Map implements Countable{
 
 	/**	@var		string		$url		URL of sitemap for sitemap index */
 	protected $url				= NULL;
@@ -70,16 +67,16 @@ class CMM_SGT_Sitemap implements Countable{
 	 *	@return		void
 	 */
 	public function add( $location, $datetime = NULL, $frequency = NULL, $priority = NULL ){
-		$this->addUrl( new CMM_SGT_Sitemap_URL( $location, $datetime, $frequency, $priority ) );	//  
+		$this->addUrl( new \CeusMedia\Sitemap\Model\Url( $location, $datetime, $frequency, $priority ) );	//
 	}
 
 	/**
 	 *	Add URL to sitemap.
 	 *	@access		public
-	 *	@param		CMM_SGT_Sitemap	$url		URL to add to sitemap
+	 *	@param		\CeusMedia\Sitemap\Model\Url	$url		URL to add to sitemap
 	 *	@return		boolean
 	 */
-	public function addUrl( CMM_SGT_Sitemap_URL $url ){
+	public function addUrl( \CeusMedia\Sitemap\Model\Url $url ){
 		foreach( $this->urls as $entry )
 			if( $entry->getLocation() === $url->getLocation() )
 				return FALSE;
@@ -133,11 +130,11 @@ class CMM_SGT_Sitemap implements Countable{
 	/**
 	 *	Returns XML of sitemap. Compression is available.
 	 *	@access		public
-	 *	@param		integer		$compression		Compression method (see CMM_SGT_Compressor)
+	 *	@param		integer		$compression		Compression method (see \CeusMedia\Sitemap\Compressor)
 	 *	@return		string
 	 */
 	public function render( $compression = NULL ){
-		return CMM_SGT_Generator::renderSitemap( $this, $compression );
+		return \CeusMedia\Sitemap\Generator::renderSitemap( $this, $compression );
 	}
 
 	/**
@@ -145,13 +142,13 @@ class CMM_SGT_Sitemap implements Countable{
 	 *	Enabling compression automatically adds extension to file name.
 	 *	@access		public
 	 *	@param		string		$fileName			Name of sitemap file
-	 *	@param		integer		$compression		Compression method (see CMM_SGT_Compressor)
+	 *	@param		integer		$compression		Compression method (see \CeusMedia\Sitemap\Compressor)
 	 *	@return		integer		Number of written bytes
 	 */
 	public function save( $fileName, $compression = NULL ){
 		$number	= File_Writer::save( $fileName, $this->render() );
 		if( $compression )
-			$number	= CMM_SGT_Compressor::compressFile( $fileName, $compression );
+			$number	= \CeusMedia\Sitemap\Compressor::compressFile( $fileName, $compression );
 		return $number;
 	}
 
